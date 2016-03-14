@@ -16,13 +16,13 @@
 
 Odds::Odds()
 {
-	hand.resize(6);
-	hand[0].set(7,3);
-	hand[1].set(6,0);
-	hand[2].set(13,3);
-	hand[3].set(6,2);
-	hand[4].set(7,0);
-	hand[5].set(14,2);
+	hand.resize(5);
+	hand[0].set(10,2);
+	hand[1].set(14,2);
+	hand[2].set(13,2);
+	hand[3].set(11,2);
+	hand[4].set(8,3);
+	//hand[5].set(14,2);
 
 }
 
@@ -462,6 +462,54 @@ int Odds::fourCardThree(int outs)
 	return (outs);
 }
 
+int Odds::runnerRunnerEdge(int outs)
+{
+	//this function checks if 3 of the 5 of the A-5 or 10-A straight are present
+	int straightcount = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		if (reducedHand[i] == i + 1)
+		{
+			straightcount = straightcount + 1;
+		}
+	}
+	if (straightcount == 3)
+	{
+		outs = 31;
+	}
+	straightcount = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		if (reducedHand[i] == i + 10)
+		{
+			straightcount = straightcount + 1;
+		}
+	}
+		if (straightcount == 3)
+	{
+		outs = 31;
+	}
+	return(outs);
+}
+
+int Odds::runnerRunnerThreeRow(int outs)
+{
+	//This Function will check to see if there are 3 cards in a row in a group of 5 cards starting at 2
+	return(outs);
+}
+
+int Odds::runnerRunnerGapOne(int outs)
+{
+	//this functino will check to see if in a sliding block of 4 cards if there are 3.
+	return (outs);
+}
+
+int Odds::runnerRunnerGapTwo(int outs)
+{
+	//this function will check to see if in a sliding block of 5 cards if there are 3.
+	return (outs);
+}
+
 
 int Odds::straightOdds()
 {
@@ -536,13 +584,31 @@ int Odds::straightOdds()
 	}
 
 	//this else if block checks 4 in a row starting with the low card.
-	else 
+	else
 	{
 		outs = fourCardZero(outs);
 		outs = fourCardOne(outs);
 		outs = fourCardTwo(outs);
 		outs = fourCardThree(outs);
 	}
+
+
+	//Runner runner for straight.
+	/*
+	if (outs == 0 && hand.size == 5)
+	{
+	//run straight from A to 5 missing 2 and from 10 to A missing 2 
+	}
+	if (outs == 0 && hand.size == 5)
+	{
+	// Odds in the 2 to 
+	}
+	if (outs == 0 && hand.size == 5)
+	{
+
+	}
+	*/
+
 
 	//this else if block checks 4 in a row starting with reducedhand[1] card.
 	/*This section is an attempt at optimization that is not working correct
@@ -870,6 +936,46 @@ double Odds::outsToOdds (double outs)
 	
 }
 
+void Odds::oddsClear()
+{
+	
+	hand.clear();
+	for (int i = 0; i < 9; i++)
+	{
+		reducedHand[i] = 0;
+	}
+	for(int i=0;i<15;i++)
+	{
+		rankCount[i] = 0;
+	}
+	for(int i=0;i<4;i++)
+	{
+		suitCount[i] = 0;
+	}
+	for(int i=0;i<15;i++)
+	{
+		rankXtra[i] = 0;
+	}
+	for (int i = 0; i < 9; i++)
+	{
+		reducedHand[i] = 0;
+	}
+	/*
+	hand.push_back (newCard);
+
+	for (unsigned int i = 0 ; i < hand.size(); i++)
+	{
+		hand[i].printCard();
+	}
+	*/
+}
+
+void Odds::addCard(Card cardIn)
+{
+	hand.push_back(cardIn);
+
+}
+
 double Odds::oddsCall()
 {
 	double odds[9];
@@ -939,12 +1045,12 @@ double Odds::oddsCall()
 	oddsOut.bestHandOdds = 0;
 	oddsOut.nextHandOdds = 0;
 	oddsOut.thirdHandOdds =0;
-	oddsOut.handHeld = 0;
+	oddsOut.handHeld = 1;
 	for (int i = 8 ; i > 0; i--)
 	{
 		if (odds[i] == 100)
 		{
-			oddsOut.handHeld = i;
+			oddsOut.handHeld = i+1;
 			i = 0;
 		}
 	}
@@ -953,7 +1059,7 @@ double Odds::oddsCall()
 	{
 		if (odds[i] > 0 && odds[i] < 100)
 		{
-			oddsOut.nextHandRank = i;
+			oddsOut.nextHandRank = i+1;
 			oddsOut.nextHandOdds = odds[i];
 			i = 10;
 		}
@@ -963,7 +1069,7 @@ double Odds::oddsCall()
 	{
 		if (odds[i] > 0 && odds[i] < 100)
 		{
-			oddsOut.bestHandRank = i;
+			oddsOut.bestHandRank = i+1;
 			oddsOut.bestHandOdds = odds[i];
 			i = 0;
 		}
@@ -1009,6 +1115,9 @@ double Odds::oddsCall()
 	cout << "The next best hands odds are: " << oddsOut.nextHandOdds << "%" << endl;
 	cout << "The best hands rank is: " << oddsOut.bestHandRank << endl;
 	cout << "The best hands odds are: " << oddsOut.bestHandOdds << "%" << endl;
+	
+	
+	
 	//return(oddsReturn);
 	return(0);
-}
+} 

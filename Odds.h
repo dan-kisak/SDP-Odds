@@ -25,11 +25,16 @@ public:
 	int fourCardOne(int outs);
 	int fourCardTwo(int outs);
 	int fourCardThree(int outs);
-	int Odds::straightFlushZeroRemover();
+	int runnerRunnerEdge(int outs);
+	int runnerRunnerThreeRow(int outs);
+	int runnerRunnerGapTwo(int outs);
+	int runnerRunnerGapOne(int outs);
+	int straightFlushZeroRemover();
 	OddsOut oddsOut;
 	Odds();
 	~Odds(void);
 
+	 void addCard(Card cardIn);
 	 void cardOne();	 
 	 void HandSort();
 	 void calcRanks();
@@ -45,6 +50,7 @@ public:
 	 int flushOdds();
 	 int straightOdds();
 	 int straightFlushOdds();
+	 void oddsClear();
 
 	 double oddsCall();
 	 double outsToOdds(double outs);
